@@ -1,1 +1,1 @@
-mod student;
+pub mod student;

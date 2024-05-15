@@ -18,3 +18,4 @@ Cargo.lock
 python/*/*.so
 python/*/__pycache__
 *.lock
+.idea
