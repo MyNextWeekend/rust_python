@@ -1,19 +1,32 @@
-use pyo3::{pyclass, pymethods};
+use pyo3::{pyclass, pymethods, types::{PyLong, PyUnicode}, PyResult};
 
 #[pyclass]
 pub struct Student {
+    #[pyo3(get)]
     name: String,
-    age: i16,
+    #[pyo3(get)]
+    age: i32,
 }
 
 
 #[pymethods]
 impl Student {
+    fn __repr__(&self) -> String {
+        format!(
+            "Student(name='{}', age={})",
+            self.name, self.age
+        )
+    }
+
     #[new]
-    fn new() -> Self {
+    fn py_new(name:String,age:i32) -> Self {
         Student {
-            name: "张三".into(),
-            age: 18,
+            name: name,
+            age: age,
         }
     }
+}
+
+impl Student {
+    
 }

@@ -11,5 +11,5 @@ print(rust_python.list_to_dic(a_list))
 
 
 print(f'{"="*20} 对象调用 {"="*20}')
-student= rust_python.Student()
+student= rust_python.Student("里斯",9)
 print(student)
