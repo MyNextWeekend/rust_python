@@ -22,7 +22,7 @@ fn many_args(num: i32, py_args: &PyTuple, py_kwargs: Option<&PyDict>) -> PyResul
 // 函数的参数可以是rust类型，自动转换，失败会报错
 #[pyfunction]
 #[pyo3(signature = (input_dic))]
-fn dic_to_list(input_dic: HashMap<String,String>) -> PyResult<Vec<String>> {
+fn dic_to_list(input_dic: HashMap<String, String>) -> PyResult<Vec<String>> {
     println!("rust function dic_to_list start");
 
     let mut result = Vec::new();
@@ -35,7 +35,7 @@ fn dic_to_list(input_dic: HashMap<String,String>) -> PyResult<Vec<String>> {
 
 #[pyfunction]
 #[pyo3(signature = (names))]
-fn list_to_dic( names: Vec<String>) -> PyResult<HashMap<usize, String>> {
+fn list_to_dic(names: Vec<String>) -> PyResult<HashMap<usize, String>> {
     println!("rust function list_to_dic start");
 
     let mut result = HashMap::new();
