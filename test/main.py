@@ -21,3 +21,7 @@ try:
     student.raise_exception(1)
 except ChildErrorA as e:
     print(e)
+
+b_list = [1,2,3,4,50,10]
+print(student.py_set_lages_age(b_list))
+print(student)

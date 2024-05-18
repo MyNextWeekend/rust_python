@@ -10,6 +10,7 @@ pub struct Student {
 }
 
 
+/// Student 暴露给python调用的方法
 #[pymethods]
 impl Student {
     fn __repr__(&self) -> String {
@@ -47,6 +48,16 @@ impl Student {
             }
         }
     }
+
+    fn py_set_lages_age(&mut self,ages: Vec<i32>) -> PyResult<i32> {
+        let age = ages.iter().max();
+        self.age= age.unwrap().to_owned();
+        Ok(self.age)
+    }
+
 }
 
-impl Student {}
+// Student 编写与python无关的方法
+impl Student {
+
+}
