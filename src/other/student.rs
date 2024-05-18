@@ -1,10 +1,13 @@
-use pyo3::{pyclass, pymethods, types::{PyLong, PyUnicode}, PyResult};
+use pyo3::{pyclass, pymethods, PyResult};
 
-#[pyclass]
+use super::{ChildErrorA, ChildErrorB, ChildErrorC, MyError};
+
+
+
+
+#[pyclass(get_all)]
 pub struct Student {
-    #[pyo3(get)]
     name: String,
-    #[pyo3(get)]
     age: i32,
 }
 
@@ -23,6 +26,27 @@ impl Student {
         Student {
             name: name,
             age: age,
+        }
+    }
+
+    /// 抛出自定义异常
+    fn raise_exception(&self,number:Option<i32>) -> PyResult<String> {
+        match number {
+            Some(0) =>{
+                Err(MyError::new_err("MyError".to_string()))
+            }
+            Some(1) =>{
+                Err(ChildErrorA::new_err("A_ERR".to_string()))
+            }
+            Some(2) =>{
+                Err(ChildErrorB::new_err("B_ERR".to_string()))
+            }
+            Some(3) =>{
+                Err(ChildErrorC::new_err("C_ERR".to_string()))
+            }
+            _ =>{
+                Ok("ok".into())
+            }
         }
     }
 }
