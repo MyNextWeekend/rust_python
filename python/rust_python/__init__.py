@@ -3,7 +3,8 @@ from rust_python._lowlevel import (
     dic_to_list,
     list_to_dic,
     Student,
-    MyError,ChildErrorA,ChildErrorB,ChildErrorC
+    parallel_sum_of_squares,
+    MyError, ChildErrorA, ChildErrorB, ChildErrorC
 )
 
 __all__ = [
@@ -11,5 +12,6 @@ __all__ = [
     "dic_to_list",
     "list_to_dic",
     "Student",
-    "MyError","ChildErrorA","ChildErrorB","ChildErrorC"
+    "parallel_sum_of_squares",
+    "MyError", "ChildErrorA", "ChildErrorB", "ChildErrorC"
 ]

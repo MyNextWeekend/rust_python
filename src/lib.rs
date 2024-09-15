@@ -46,6 +46,19 @@ fn list_to_dic(names: Vec<String>) -> PyResult<HashMap<usize, String>> {
     Ok(result)
 }
 
+/// 利用多线程实现真实的并发
+#[pyfunction]
+fn parallel_sum_of_squares(num: usize) -> PyResult<u128> {
+    // 释放 GIL 以便 Rust 能够利用所有 CPU 核心
+    Python::with_gil(|py| py.allow_threads(|| {
+        let mut sum :u128 = 0;
+        for i in 0..num+1 {
+            let i1 = i as u128;
+            sum += i1 * i1;
+        }
+        Ok(sum)
+    }))
+}
 
 /// 在Rust中实现的Python模块。
 #[pymodule]
@@ -54,6 +67,7 @@ fn _lowlevel(py: Python, m: &PyModule) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(many_args, m)?)?;
     m.add_function(wrap_pyfunction!(dic_to_list, m)?)?;
     m.add_function(wrap_pyfunction!(list_to_dic, m)?)?;
+    m.add_function(wrap_pyfunction!(parallel_sum_of_squares, m)?)?;
     // 添加类
     m.add_class::<Student>()?;
     // 添加异常
