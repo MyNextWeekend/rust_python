@@ -29,7 +29,7 @@ rye sync
 rye install maturin
 
 # 配置环境变量，将rye工具的路径添加到系统的环境变量中
-vim .bash_profile 
+vim ～/.bash_profile 
 # 在.bash_profile中增加以下行：
 source "$HOME/.rye/env"
 
