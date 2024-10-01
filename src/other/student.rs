@@ -49,15 +49,15 @@ impl Student {
         }
     }
 
-    fn py_set_lages_age(&mut self,ages: Vec<i32>) -> PyResult<i32> {
+    fn py_set_large_age(&mut self, ages: Vec<i32>) -> PyResult<i32> {
         let age = ages.iter().max();
-        self.age= age.unwrap().to_owned();
+        self.age = age.unwrap().to_owned();
         Ok(self.age)
     }
-
 }
 
 // Student 编写与python无关的方法
 impl Student {
+
 
 }

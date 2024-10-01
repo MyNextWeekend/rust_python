@@ -6,9 +6,9 @@ mod other;
 
 use other::{student::Student, ChildErrorA, ChildErrorB, ChildErrorC, MyError};
 
-// 默认参数以及不定长参数
+/// 默认参数以及不定长参数
 #[pyfunction]
-#[pyo3(signature = (num = 10, * py_args, * * py_kwargs))]
+#[pyo3(signature = (num = 10, *py_args, **py_kwargs))]
 fn many_args(num: i32, py_args: &PyTuple, py_kwargs: Option<&PyDict>) -> PyResult<String> {
     println!("rust function many_args start");
     let result = format!(
@@ -19,7 +19,7 @@ fn many_args(num: i32, py_args: &PyTuple, py_kwargs: Option<&PyDict>) -> PyResul
 }
 
 
-// 函数的参数可以是rust类型，自动转换，失败会报错
+/// 函数的参数可以是rust类型，自动转换，失败会报错
 #[pyfunction]
 #[pyo3(signature = (input_dic))]
 fn dic_to_list(input_dic: HashMap<String, String>) -> PyResult<Vec<String>> {
@@ -51,8 +51,8 @@ fn list_to_dic(names: Vec<String>) -> PyResult<HashMap<usize, String>> {
 fn parallel_sum_of_squares(num: usize) -> PyResult<u128> {
     // 释放 GIL 以便 Rust 能够利用所有 CPU 核心
     Python::with_gil(|py| py.allow_threads(|| {
-        let mut sum :u128 = 0;
-        for i in 0..num+1 {
+        let mut sum: u128 = 0;
+        for i in 0..num + 1 {
             let i1 = i as u128;
             sum += i1 * i1;
         }
