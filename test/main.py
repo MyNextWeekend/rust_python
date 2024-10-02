@@ -44,3 +44,7 @@ rust_python.parallel_sum_of_squares(20000000)
 rust_python.parallel_sum_of_squares(20000000)
 rust_python.parallel_sum_of_squares(20000000)
 print(f"单线程顺序耗时：{time.time() - start}")
+
+# 传入 类实例 作为型参
+rust_python.student_set_age(student, 15)
+print(rust_python.student_info(student))

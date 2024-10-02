@@ -7,7 +7,7 @@ use super::{ChildErrorA, ChildErrorB, ChildErrorC, MyError};
 #[pyclass(get_all)]
 pub struct Student {
     name: String,
-    age: i32,
+    age: u32,
 }
 
 
@@ -22,7 +22,7 @@ impl Student {
     }
 
     #[new]
-    fn py_new(name: String, age: i32) -> Self {
+    fn py_new(name: String, age: u32) -> Self {
         Student {
             name: name,
             age: age,
@@ -50,7 +50,7 @@ impl Student {
         }
     }
 
-    fn py_set_large_age(&mut self, ages: Vec<i32>) -> PyResult<i32> {
+    fn py_set_large_age(&mut self, ages: Vec<u32>) -> PyResult<u32> {
         let age = ages.iter().max();
         self.age = age.unwrap().to_owned();
         Ok(self.age)
@@ -60,5 +60,13 @@ impl Student {
 // Student 编写与python无关的方法
 impl Student {
 
+    // 不可变借用的方法
+    pub fn get_info(&self) -> String {
+        format!("Name: {}, Age: {}", self.name, self.age)
+    }
 
+    // 可变借用的方法
+    pub fn set_age(&mut self, new_age: u32) {
+        self.age = new_age;
+    }
 }

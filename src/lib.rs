@@ -60,6 +60,21 @@ fn parallel_sum_of_squares(num: usize) -> PyResult<u128> {
     }))
 }
 
+
+/// 类实例作为型参  操作对象的不可变借用
+#[pyfunction]
+fn student_info(stu: &Student) -> String {
+    stu.get_info()
+}
+
+/// 类实例作为型参  操作对象的可变借用
+#[pyfunction]
+fn student_set_age(stu: &mut Student, age: u32) {
+    stu.set_age(age);
+}
+
+
+
 /// 这个是模块描述：在Rust中实现的Python模块。
 #[pymodule]
 fn _lowlevel(py: Python, m: &PyModule) -> PyResult<()> {
@@ -68,6 +83,9 @@ fn _lowlevel(py: Python, m: &PyModule) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(dic_to_list, m)?)?;
     m.add_function(wrap_pyfunction!(list_to_dic, m)?)?;
     m.add_function(wrap_pyfunction!(parallel_sum_of_squares, m)?)?;
+    // 方法型参是类实例
+    m.add_function(wrap_pyfunction!(student_info, m)?)?;
+    m.add_function(wrap_pyfunction!(student_set_age, m)?)?;
     // 添加类
     m.add_class::<Student>()?;
     // 添加异常
