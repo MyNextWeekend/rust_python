@@ -3,6 +3,7 @@ use pyo3::{pyclass, pymethods, PyResult};
 use super::{ChildErrorA, ChildErrorB, ChildErrorC, MyError};
 
 
+/// 这个是类的描述
 #[pyclass(get_all)]
 pub struct Student {
     name: String,

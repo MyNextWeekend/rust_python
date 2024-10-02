@@ -24,7 +24,7 @@ except ChildErrorA as e:
     print(e)
 
 b_list = [1, 2, 3, 4, 50, 10]
-print(student.py_set_lages_age(b_list))
+print(student.py_set_large_age(b_list))
 print(student)
 
 # 测试多线程耗时

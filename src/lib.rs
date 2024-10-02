@@ -60,7 +60,7 @@ fn parallel_sum_of_squares(num: usize) -> PyResult<u128> {
     }))
 }
 
-/// 在Rust中实现的Python模块。
+/// 这个是模块描述：在Rust中实现的Python模块。
 #[pymodule]
 fn _lowlevel(py: Python, m: &PyModule) -> PyResult<()> {
     // 添加函数

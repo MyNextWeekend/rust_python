@@ -48,4 +48,7 @@ source .bash_profile
 # 构建Rust代码，并使Python能够使用最新构建的包
 # --skip-install参数用于跳过安装环节（仅用于本地开发）
 maturin develop --skip-install
+
+# 构建你的项目并生成 .whl 文件 .pyi 文件将自动放在 target/wheels/ 目录下 通常会与生成的 .whl 文件一起生成
+maturin build --release
 ```
