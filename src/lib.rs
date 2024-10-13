@@ -8,7 +8,7 @@ use crate::exception::{ChildErrorA, ChildErrorB, ChildErrorC, MyError};
 
 /// 这个是模块描述：在Rust中实现的Python模块。
 #[pymodule]
-fn _lowlevel(py: Python, m: &PyModule) -> PyResult<()> {
+fn _lowlevel(py: Python,m: &Bound<'_, PyModule>) -> PyResult<()> {
     // 添加函数
     m.add_function(wrap_pyfunction!(many_args, m)?)?;
     m.add_function(wrap_pyfunction!(dic_to_list, m)?)?;
@@ -20,9 +20,9 @@ fn _lowlevel(py: Python, m: &PyModule) -> PyResult<()> {
     // 添加类
     m.add_class::<Student>()?;
     // 添加异常
-    m.add("MyError", py.get_type::<MyError>())?;
-    m.add("ChildErrorA", py.get_type::<ChildErrorA>())?;
-    m.add("ChildErrorB", py.get_type::<ChildErrorB>())?;
-    m.add("ChildErrorC", py.get_type::<ChildErrorC>())?;
+    m.add("MyError", py.get_type_bound::<MyError>())?;
+    m.add("ChildErrorA", py.get_type_bound::<ChildErrorA>())?;
+    m.add("ChildErrorB", py.get_type_bound::<ChildErrorB>())?;
+    m.add("ChildErrorC", py.get_type_bound::<ChildErrorC>())?;
     Ok(())
 }

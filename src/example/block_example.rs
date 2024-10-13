@@ -5,7 +5,7 @@ use crate::exception::*;
 /// 默认参数以及不定长参数
 #[pyfunction]
 #[pyo3(signature = (num = 10, * py_args, * * py_kwargs))]
-pub fn many_args(num: i32, py_args: &PyTuple, py_kwargs: Option<&PyDict>) -> PyResult<String> {
+pub fn many_args(num: i32, py_args: &Bound<'_, PyTuple>, py_kwargs: Option<&Bound<'_, PyDict>>) -> PyResult<String> {
     println!("rust function many_args start...");
     let result = format!(
         "func many_args => num: {}  py_args: {:?} py_kwargs: {:?} ",
