@@ -1,6 +1,6 @@
 use pyo3::{*, types::{PyDict, PyTuple}};
 use std::collections::HashMap;
-use crate::exception::*;
+use crate::error::*;
 
 /// 默认参数以及不定长参数
 #[pyfunction]

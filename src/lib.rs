@@ -1,10 +1,10 @@
 use pyo3::prelude::*;
 
 mod example;
-mod exception;
+mod error;
 
 use crate::example::*;
-use crate::exception::{ChildErrorA, ChildErrorB, ChildErrorC, MyError};
+use crate::error::{ChildErrorA, ChildErrorB, ChildErrorC, MyError};
 
 /// 这个是模块描述：在Rust中实现的Python模块。
 #[pymodule]
