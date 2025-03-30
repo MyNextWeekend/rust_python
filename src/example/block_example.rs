@@ -109,6 +109,11 @@ impl Student {
         self.age = age.unwrap().to_owned();
         Ok(self.age)
     }
+
+    pub fn py_set_other_age(&self, stu: &mut Student) -> PyResult<()> {
+        self.set_other_age(stu);
+        Ok(())
+    }
 }
 
 // Student 编写与python无关的方法
@@ -121,5 +126,9 @@ impl Student {
     // 可变借用的方法
     pub fn set_age(&mut self, new_age: u32) {
         self.age = new_age;
+    }
+
+    pub fn set_other_age(&self,stu:&mut Student){
+        stu.set_age(self.age)
     }
 }

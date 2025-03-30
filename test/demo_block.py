@@ -43,6 +43,9 @@ def test_instance():
     # 有set_all注解的时候才可以设置属性的值
     stu.age = 100
     log.info(f"通过实例方法修改属性之后: {student_info(stu)}")
+    stu2 = Student("张三", 19)
+    stu.py_set_other_age(stu2)
+    log.info(f"通过实例方法修改属性之后: {student_info(stu2)}")
 
 
 if __name__ == "__main__":
