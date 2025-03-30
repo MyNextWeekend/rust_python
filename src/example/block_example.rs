@@ -6,7 +6,7 @@ use crate::error::*;
 #[pyfunction]
 #[pyo3(signature = (num = 10, * py_args, * * py_kwargs))]
 pub fn many_args(num: i32, py_args: &Bound<'_, PyTuple>, py_kwargs: Option<&Bound<'_, PyDict>>) -> PyResult<String> {
-    println!("rust function many_args start...");
+    // println!("rust function many_args start...");
     let result = format!(
         "func many_args => num: {}  py_args: {:?} py_kwargs: {:?} ",
         num, py_args, py_kwargs,
@@ -18,11 +18,11 @@ pub fn many_args(num: i32, py_args: &Bound<'_, PyTuple>, py_kwargs: Option<&Boun
 /// 函数的参数可以是rust类型，自动转换，失败会报错
 #[pyfunction]
 pub fn dic_to_list(input_dic: HashMap<String, String>) -> PyResult<Vec<String>> {
-    println!("rust function dic_to_list start...");
+    // println!("rust function dic_to_list start...");
 
     let mut result = Vec::new();
-    for (k, v) in input_dic {
-        println!("遍历字典: {k}: {v}");
+    for (_, v) in input_dic {
+        // println!("遍历字典: {k}: {v}");
         result.push(v)
     }
     Ok(result)
@@ -31,11 +31,11 @@ pub fn dic_to_list(input_dic: HashMap<String, String>) -> PyResult<Vec<String>> 
 /// 列表转字典
 #[pyfunction]
 pub fn list_to_dic(names: Vec<String>) -> PyResult<HashMap<usize, String>> {
-    println!("rust function list_to_dic start...");
+    // println!("rust function list_to_dic start...");
 
     let mut result = HashMap::new();
     for (index, value) in names.iter().enumerate() {
-        println!("遍历列表: {:?}", value);
+        // println!("遍历列表: {:?}", value);
         result.insert(index, value.to_owned());
     }
     Ok(result)
@@ -45,20 +45,20 @@ pub fn list_to_dic(names: Vec<String>) -> PyResult<HashMap<usize, String>> {
 /// 类实例作为型参  操作对象的不可变借用
 #[pyfunction]
 pub fn student_info(stu: &Student) -> String {
-    println!("rust function student_info start...");
+    // println!("rust function student_info start...");
     stu.get_info()
 }
 
 /// 类实例作为型参  操作对象的可变借用
 #[pyfunction]
 pub fn student_set_age(stu: &mut Student, age: u32) {
-    println!("rust function student_set_age start...");
+    // println!("rust function student_set_age start...");
     stu.set_age(age);
 }
 
 
 /// 这个是类的描述
-#[pyclass(get_all)]
+#[pyclass(get_all,set_all)]
 pub struct Student {
     name: String,
     age: u32,
@@ -83,7 +83,7 @@ impl Student {
 
     /// 抛出自定义异常
     pub fn raise_exception(&self, number: Option<i32>) -> PyResult<String> {
-        println!("rust function raise_exception start...");
+        // println!("rust function raise_exception start...");
         match number {
             Some(0) => {
                 Err(MyError::new_err("MyError".to_string()))
@@ -104,7 +104,7 @@ impl Student {
     }
 
     pub fn py_set_large_age(&mut self, ages: Vec<u32>) -> PyResult<u32> {
-        println!("rust function py_set_large_age start...");
+        // println!("rust function py_set_large_age start...");
         let age = ages.iter().max();
         self.age = age.unwrap().to_owned();
         Ok(self.age)
