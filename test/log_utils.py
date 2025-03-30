@@ -70,7 +70,3 @@ class Logger:
 
     def get_logger(self):
         return self.logger
-
-
-if __name__ == "__main__":
-    print(f"{BASE_PATH=}")
