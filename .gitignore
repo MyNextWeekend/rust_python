@@ -16,6 +16,8 @@ Cargo.lock
 .venv
 
 python/*/*.so
-python/*/__pycache__
+*/__pycache__/*
 *.lock
 .idea
+logs/*
+*.so

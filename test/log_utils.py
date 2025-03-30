@@ -3,7 +3,10 @@
 # @Author  : MyNextWeekend
 import functools
 import logging
+import pathlib
 from logging.handlers import TimedRotatingFileHandler
+
+BASE_PATH = pathlib.Path(__file__).parent.parent
 
 
 def singleton(cls):
@@ -16,7 +19,7 @@ def singleton(cls):
 
     @functools.wraps(cls.__new__)
     def singleton_new(cls, *args, **kw):
-        it = cls.__dict__.get('__it__')
+        it = cls.__dict__.get("__it__")
         if it is not None:
             return it
 
@@ -32,12 +35,13 @@ def singleton(cls):
 
 
 @singleton
-class SingletonLog:
-
+class Logger:
     def __init__(self):
         # 如果已经初始化了就不再执行，避免重复添加handle
         self.Flag = False
-        self.fmt_str = "%(asctime)s【%(levelname)s】-%(filename)s[%(lineno)d]: %(message)s"
+        self.fmt_str = (
+            "%(asctime)s【%(levelname)s】-%(filename)s[%(lineno)d]: %(message)s"
+        )
         self.logger = logging.getLogger()
         self.logger.setLevel(logging.DEBUG)
         # 添加handle
@@ -47,8 +51,10 @@ class SingletonLog:
     def file_handle(self):
         """日志文件的handle"""
 
-        filename = "./log.log"
-        file_handle = TimedRotatingFileHandler(filename, when='midnight', backupCount=5, encoding='utf-8')
+        filename = BASE_PATH.joinpath("logs", "rust_python.log")
+        file_handle = TimedRotatingFileHandler(
+            filename, when="midnight", backupCount=5, encoding="utf-8"
+        )
         file_handle.setLevel(logging.INFO)
         fmt = logging.Formatter(self.fmt_str)
         file_handle.setFormatter(fmt)
@@ -64,3 +70,7 @@ class SingletonLog:
 
     def get_logger(self):
         return self.logger
+
+
+if __name__ == "__main__":
+    print(f"{BASE_PATH=}")

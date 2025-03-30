@@ -20,9 +20,9 @@ fn _lowlevel(py: Python,m: &Bound<'_, PyModule>) -> PyResult<()> {
     // 添加类
     m.add_class::<Student>()?;
     // 添加异常
-    m.add("MyError", py.get_type_bound::<MyError>())?;
-    m.add("ChildErrorA", py.get_type_bound::<ChildErrorA>())?;
-    m.add("ChildErrorB", py.get_type_bound::<ChildErrorB>())?;
-    m.add("ChildErrorC", py.get_type_bound::<ChildErrorC>())?;
+    m.add("MyError", py.get_type::<MyError>())?;
+    m.add("ChildErrorA", py.get_type::<ChildErrorA>())?;
+    m.add("ChildErrorB", py.get_type::<ChildErrorB>())?;
+    m.add("ChildErrorC", py.get_type::<ChildErrorC>())?;
     Ok(())
 }

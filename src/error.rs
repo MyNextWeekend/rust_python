@@ -1,8 +1,8 @@
-use pyo3::create_exception;
+use pyo3::{create_exception, exceptions::PyException};
 
 
 // 定义父异常类
-create_exception!(rust_python, MyError, pyo3::exceptions::PyException);
+create_exception!(rust_python, MyError, PyException);
 
 // 定义异常子类
 create_exception!(rust_python, ChildErrorA, MyError);
