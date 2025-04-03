@@ -34,7 +34,7 @@ jobs:
         uses: rustup component add llvm-tools-preview
 
       - name: 安装uv环境
-        - uses: astral-sh/setup-uv@v5
+        uses: astral-sh/setup-uv@v5
         with:
             enable-cache: true
 
