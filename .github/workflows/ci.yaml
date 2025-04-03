@@ -44,7 +44,7 @@ jobs:
       - name: 安装依赖和构建项目
         run: |
           uv sync --dev --no-install-package datafusion
-          uv run --no-project maturin build --release --strip --features substrait
+          uv run --no-project maturin build --release --strip
 
       - name: 找到 WIN 构建的产物
         if: matrix.os == 'windows-latest'
