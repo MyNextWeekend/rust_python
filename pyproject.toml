@@ -19,3 +19,8 @@ build-backend = "maturin"
 python-source = "python"
 module-name = "rust_python._lowlevel"
 features = ["pyo3/extension-module"]
+
+[dependency-groups]
+dev = [
+    "maturin>=1.8.3",
+]

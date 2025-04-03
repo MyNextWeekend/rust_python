@@ -22,7 +22,7 @@ jobs:
 
       - name: 安装rust
         uses: dtolnay/rust-toolchain@stable
-      
+
       - id: cache-rust
         name: rust缓存
         uses: Swatinem/rust-cache@v2
@@ -36,13 +36,16 @@ jobs:
       - name: 安装uv环境
         uses: astral-sh/setup-uv@v5
         with:
-            enable-cache: true
+          enable-cache: true
+
+      - name: 安装uv工具
+        run: uv sync --dev --no-install-package datafusion
 
       - name: 安装依赖和构建项目
         run: |
           uv sync --dev --no-install-package datafusion
           uv run --no-project maturin build --release --strip --features substrait
-      
+
       - name: 找到 WIN 构建的产物
         if: matrix.os == 'windows-latest'
         run: dir target\wheels\
@@ -74,5 +77,3 @@ jobs:
         with:
           name: dist
           pattern: dist-*
-          
-          
