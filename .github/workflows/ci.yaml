@@ -18,8 +18,14 @@ jobs:
       - name: 安装rust
         uses: dtolnay/rust-toolchain@stable
       
-      - name: cache rust
+      - id: cache-rust
+        name: rust缓存
         uses: Swatinem/rust-cache@v2
+
+      - run: cargo install rustfilt coverage-prepare
+        if: steps.cache-rust.outputs.cache-hit != 'true'
+
+      - run: rustup component add llvm-tools-preview
 
       - name: 安装uv环境
         uses: astral-sh/setup-uv@v5
