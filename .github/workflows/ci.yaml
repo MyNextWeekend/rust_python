@@ -30,8 +30,9 @@ jobs:
       - run: cargo install rustfilt coverage-prepare
         if: steps.cache-rust.outputs.cache-hit != 'true'
 
-      - run: rustup component add llvm-tools-preview
-      
+      - name: 添加LLVM工具
+        runs: rustup component add llvm-tools-preview
+
       - name: 安装uv环境
         - uses: astral-sh/setup-uv@v5
         with:
