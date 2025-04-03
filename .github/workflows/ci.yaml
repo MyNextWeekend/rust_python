@@ -15,7 +15,7 @@ jobs:
       fail-fast: false
       matrix:
         python-version: ["3.9", "3.10", "3.11", "3.12"]
-        os: [macos-latest, windows-latest]
+        os: [macos, windows]
     steps:
       - name: 读取仓库代码
         uses: actions/checkout@v4
@@ -39,6 +39,14 @@ jobs:
           enable-cache: true
           python-version: ${{ matrix.python-version }}
 
+      - name: 删除uv的python版本文件
+        run: |
+          # 删除uv的python版本文件
+          # 这个文件会导致uv在安装依赖时使用当前python版本
+          if [ -f ./.python-version ]; then
+            rm -rf ./.python-version
+          fi
+
       - name: 安装uv工具
         run: uv sync --dev --no-install-package datafusion
 
@@ -55,20 +63,20 @@ jobs:
         run: uv run --no-project maturin develop --release --strip
 
       - name: 找到 WIN 构建的产物
-        if: matrix.os == 'windows-latest'
+        if: matrix.os == 'windows'
         run: dir target\wheels\
         # since the runner is dynamic shellcheck (from actionlint) can't infer this is powershell
         # so we specify it explicitly
         shell: powershell
 
       - name: 找到 MAC 构建的产物
-        if: matrix.os != 'windows-latest'
+        if: matrix.os != 'windows'
         run: find target/wheels/
 
       - name: 上传构建产物
         uses: actions/upload-artifact@v4
         with:
-          name: dist-${{ matrix.os  }}
+          name: dist-${{ matrix.os  }}-${{ matrix.python-version }}
           path: target/wheels/*
 
   merge-build-artifacts:
