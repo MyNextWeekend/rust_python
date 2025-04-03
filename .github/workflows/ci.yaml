@@ -1,0 +1,24 @@
+name: 自动构建
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  maturin-build:
+    name: 构建
+    runs-on: ubuntu-latest
+    steps:
+      - name: 读取仓库代码
+        uses: actions/checkout@v2
+
+      - name: 安装uv环境
+        uses: astral-sh/setup-uv@v5.4.1
+
+      - name: 安装依赖和构建项目
+        run: |
+          uv sync
+          
