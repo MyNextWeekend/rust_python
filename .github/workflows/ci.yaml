@@ -9,7 +9,7 @@ on:
 
 jobs:
   build-python-mac-win:
-    name: mac和win 构建Wheel
+    name: ${{ matrix.os }} 构建Wheel
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
@@ -41,10 +41,17 @@ jobs:
       - name: 安装uv工具
         run: uv sync --dev --no-install-package datafusion
 
-      - name: 安装依赖和构建项目
-        run: |
-          uv sync --dev --no-install-package datafusion
-          uv run --no-project maturin build --release --strip
+      - name: 构建 Python Wheel
+        # 这里使用了--no-project参数，表示不使用当前目录下的Cargo.toml文件
+        # --release表示构建发布版本
+        # --strip表示去除调试信息
+        # --no-sdist表示不构建sdist包
+        # --no-binary :all:表示不构建二进制包
+        # --no-compile表示不编译Rust代码
+        # --no-verify表示不验证Rust代码
+        # --no-build表示不构建Rust代码
+        # --no-test表示不测试Rust代码
+        run: uv run --no-project maturin develop --release --strip
 
       - name: 找到 WIN 构建的产物
         if: matrix.os == 'windows-latest'
