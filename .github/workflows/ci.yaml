@@ -39,13 +39,19 @@ jobs:
           enable-cache: true
           python-version: ${{ matrix.python-version }}
 
-      - name: 删除uv的python版本文件
+      - name: mac删除uv的python版本文件
+        if: matrix.os != 'windows'
         run: |
           # 删除uv的python版本文件
           # 这个文件会导致uv在安装依赖时使用当前python版本
           if [ -f ./.python-version ]; then
             rm -rf ./.python-version
           fi
+
+      - name: windows删除uv的python版本文件
+        if: matrix.os == 'windows'
+        run: del .\.python-version
+        shell: powershell
 
       - name: 安装uv工具
         run: uv sync --dev --no-install-package datafusion
