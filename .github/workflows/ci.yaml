@@ -8,9 +8,14 @@ on:
       - main
 
 jobs:
-  maturin-build:
-    name: 构建
-    runs-on: ubuntu-latest
+  build-python-mac-win:
+    name: mac和win 构建Wheel
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.10"]
+        os: [macos-latest, windows-latest]
     steps:
       - name: 读取仓库代码
         uses: actions/checkout@v4
@@ -28,9 +33,45 @@ jobs:
       - run: rustup component add llvm-tools-preview
 
       - name: 安装uv环境
-        uses: astral-sh/setup-uv@v5
+        - uses: astral-sh/setup-uv@v5
+        with:
+            enable-cache: true
 
       - name: 安装依赖和构建项目
-        run: uv sync
+        run: |
+          uv sync --dev --no-install-package datafusion
+          uv run --no-project maturin build --release --strip --features substrait
+      
+      - name: 找到 WIN 构建的产物
+        if: matrix.os == 'windows-latest'
+        run: dir target\wheels\
+        # since the runner is dynamic shellcheck (from actionlint) can't infer this is powershell
+        # so we specify it explicitly
+        shell: powershell
+
+      - name: 找到 MAC 构建的产物
+        if: matrix.os != 'windows-latest'
+        run: find target/wheels/
+
+      - name: 上传构建产物
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist-${{ matrix.os  }}
+          path: target/wheels/*
+
+  merge-build-artifacts:
+    runs-on: ubuntu-latest
+    needs:
+      - build-python-mac-win
+      # - build-macos-x86_64
+      # - build-manylinux-x86_64
+      # - build-manylinux-aarch64
+      # - build-sdist
+    steps:
+      - name: 聚合构建产物
+        uses: actions/upload-artifact/merge@v4
+        with:
+          name: dist
+          pattern: dist-*
           
           
