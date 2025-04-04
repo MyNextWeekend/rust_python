@@ -89,7 +89,11 @@ jobs:
         with:
           target: ${{ matrix.target }}
           manylinux: ${{ matrix.manylinux || 'auto' }}
-          args: --release --out dist --interpreter ${{ matrix.interpreter || '3.8 3.9 3.10 3.11 3.12 pypy3.9 pypy3.10' }}
+          # --strip 剥离库以获得最小文件大小
+          # --release 仅在发布时使用
+          # --out dist 指定输出目录
+          # --interpreter 仅在发布时使用
+          args: --release --strip --out dist --interpreter ${{ matrix.interpreter || '3.8 3.9 3.10 3.11 3.12 pypy3.9 pypy3.10' }}
           rust-toolchain: stable
 
       - name: 获取构建产物
