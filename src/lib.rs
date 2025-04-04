@@ -1,22 +1,21 @@
 use pyo3::prelude::*;
 
-mod example;
 mod error;
+mod example_block;
+mod example_thread;
 
-pub use crate::example::*;
 pub use crate::error::{ChildErrorA, ChildErrorB, ChildErrorC, MyError};
-
+pub use crate::example_block::*;
+pub use crate::example_thread::*;
 
 /// 这个是模块描述：在Rust中实现的Python模块。
 #[pymodule]
 mod _core {
-    use super::*;
 
     #[pymodule_export]
     use crate::{
-        many_args, dic_to_list, list_to_dic, parallel_sum_of_squares,
-        student_info, student_set_age, Student,
-        MyError, ChildErrorA, ChildErrorB, ChildErrorC,
+        dic_to_list, list_to_dic, many_args, parallel_sum_of_squares, student_info,
+        student_set_age, ChildErrorA, ChildErrorB, ChildErrorC, MyError, Student,
     };
 }
 
@@ -40,4 +39,3 @@ mod _core {
 //     m.add("ChildErrorC", py.get_type::<ChildErrorC>())?;
 //     Ok(())
 // }
-
