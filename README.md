@@ -9,6 +9,7 @@
 
 - 使用pyo3为python编写包
 - 使用uv作为管理工
+- 添加github自动构建流水线
 
 ## 使用maturin初始化一个新的rust-python混合项目
 
