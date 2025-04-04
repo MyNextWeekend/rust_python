@@ -81,6 +81,13 @@ jobs:
           enable-cache: true
           python-version: ${{ matrix.python-version }}
 
+      - name: build sdist
+        if: ${{ matrix.os == 'ubuntu' && matrix.target == 'x86_64' && matrix.manylinux == 'auto' }}
+        uses: PyO3/maturin-action@v1
+        with:
+          command: sdist
+          args: --out dist
+
       - name: 构建 wheels
         uses: PyO3/maturin-action@v1
         with:
