@@ -10,7 +10,7 @@ on:
 jobs:
   build-python-mac-win:
     name: ${{ matrix.os }}-python${{ matrix.python-version }}构建Wheel
-    runs-on: ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}-latest
     strategy:
       fail-fast: false
       matrix:
