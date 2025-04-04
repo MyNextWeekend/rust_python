@@ -1,4 +1,4 @@
-from rust_python._lowlevel import (
+from rust_python._core import (
     ChildErrorA,
     ChildErrorB,
     ChildErrorC,

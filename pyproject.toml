@@ -17,7 +17,7 @@ build-backend = "maturin"
 
 [tool.maturin]
 python-source = "python"
-module-name = "rust_python._lowlevel"
+module-name = "rust_python._core"
 features = ["pyo3/extension-module"]
 
 [dependency-groups]
