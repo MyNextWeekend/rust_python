@@ -62,6 +62,7 @@ jobs:
           # Windows on arm64 only supports Python 3.11+
           - os: windows
             target: aarch64
+
     steps:
       - name: 读取仓库代码
         uses: actions/checkout@v4
@@ -88,7 +89,7 @@ jobs:
         with:
           target: ${{ matrix.target }}
           manylinux: ${{ matrix.manylinux || 'auto' }}
-          args: --release --out dist --interpreter ${{ matrix.interpreter || '3.8 3.9 3.10 3.11 3.12 3.13 pypy3.9 pypy3.10' }}
+          args: --release --out dist --interpreter ${{ matrix.interpreter || '3.8 3.9 3.10 3.11 3.12 pypy3.9 pypy3.10' }}
           rust-toolchain: stable
 
       - name: 获取构建产物
