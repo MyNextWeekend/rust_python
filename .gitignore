@@ -21,3 +21,4 @@ target/
 .idea
 logs/*
 *.so
+**/.DS_Store
