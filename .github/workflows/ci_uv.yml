@@ -51,7 +51,7 @@ jobs:
         # --no-verify表示不验证Rust代码
         # --no-build表示不构建Rust代码
         # --no-test表示不测试Rust代码
-        run: uv run --no-project --out dist maturin develop --release --strip
+        run: uv run --no-project maturin develop --release --strip --out dist 
 
       - name: 找到构建产物
         run: ${{ matrix.ls || 'ls -lh' }} dist/
