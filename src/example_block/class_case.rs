@@ -1,17 +1,18 @@
 use crate::error::*;
+use log::info;
 use pyo3::*;
 
 /// 类实例作为型参  操作对象的不可变借用
 #[pyfunction]
 pub fn student_info(stu: &Student) -> String {
-    // println!("rust function student_info start...");
+    info!("rust function student_info start...");
     stu.get_info()
 }
 
 /// 类实例作为型参  操作对象的可变借用
 #[pyfunction]
 pub fn student_set_age(stu: &mut Student, age: u32) {
-    // println!("rust function student_set_age start...");
+    info!("rust function student_set_age start...");
     stu.set_age(age);
 }
 
@@ -37,7 +38,7 @@ impl Student {
 
     /// 抛出自定义异常
     pub fn raise_exception(&self, number: Option<i32>) -> PyResult<String> {
-        // println!("rust function raise_exception start...");
+        info!("rust function raise_exception start...");
         match number {
             Some(0) => Err(MyError::new_err("MyError".to_string())),
             Some(1) => Err(ChildErrorA::new_err("A_ERR".to_string())),
@@ -48,7 +49,7 @@ impl Student {
     }
 
     pub fn py_set_large_age(&mut self, ages: Vec<u32>) -> PyResult<u32> {
-        // println!("rust function py_set_large_age start...");
+        info!("rust function py_set_large_age start...");
         let age = ages.iter().max();
         self.age = age.unwrap().to_owned();
         Ok(self.age)
