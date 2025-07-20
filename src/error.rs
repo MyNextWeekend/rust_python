@@ -26,8 +26,8 @@ impl From<Error> for pyo3::PyErr {
     fn from(err: Error) -> Self {
         match err {
             Error::Io(e) => MyError::new_err(format!("IO error: {}", e)),
-            Error::Ods => ChildErrorA::new_err("ODS error occurred"),
-            Error::Xls => ChildErrorB::new_err("XLS error occurred"),
+            Error::Ods => ChildErrorA::new_err(err.to_string()),
+            Error::Xls => ChildErrorB::new_err(err.to_string()),
             Error::ValidationError(_) => pyo3::exceptions::PyValueError::new_err(err.to_string()),
         }
     }

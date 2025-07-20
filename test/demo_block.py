@@ -20,7 +20,7 @@ def test_class():
     stu.py_set_large_age(age_list)
 
     try:
-        stu.raise_exception(2)
+        stu.py_raise_exception(-2)
     except ChildErrorA as e:
         log.info(f"catch ChildErrorA: {e}")
     except Exception as e:

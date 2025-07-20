@@ -11,9 +11,10 @@ pub fn student_info(stu: &Student) -> String {
 
 /// 类实例作为型参  操作对象的可变借用
 #[pyfunction]
-pub fn student_set_age(stu: &mut Student, age: u32) {
+pub fn student_set_age(stu: &mut Student, age: u32) -> PyResult<()> {
     info!("rust function student_set_age start...");
-    stu.set_age(age);
+    stu.set_age(age)?;
+    Ok(())
 }
 
 /// 这个是类的描述
