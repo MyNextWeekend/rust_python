@@ -21,7 +21,7 @@ pub use crate::example_thread::*;
 
 /// 这个是模块描述：在Rust中实现的Python模块。
 #[pymodule]
-fn _core(py: Python,m: &Bound<'_, PyModule>) -> PyResult<()> {
+fn _core(py: Python, m: &Bound<'_, PyModule>) -> PyResult<()> {
     // A good place to install the Rust -> Python logger.
     pyo3_log::init();
 

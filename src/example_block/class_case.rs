@@ -1,4 +1,4 @@
-use crate::error::*;
+use crate::error::{Error, Result};
 use log::info;
 use pyo3::*;
 
@@ -32,48 +32,53 @@ impl Student {
     }
 
     #[new]
-    pub fn py_new(name: String, age: u32) -> Self {
+    fn py_new(name: String, age: u32) -> Self {
         Student { name, age }
     }
 
     /// 抛出自定义异常
-    pub fn raise_exception(&self, number: Option<i32>) -> PyResult<String> {
-        info!("rust function raise_exception start...");
-        match number {
-            Some(0) => Err(MyError::new_err("MyError".to_string())),
-            Some(1) => Err(ChildErrorA::new_err("A_ERR".to_string())),
-            Some(2) => Err(ChildErrorB::new_err("B_ERR".to_string())),
-            Some(3) => Err(ChildErrorC::new_err("C_ERR".to_string())),
-            _ => Ok("ok".into()),
-        }
+    fn py_raise_exception(&self, number: Option<i32>) -> PyResult<String> {
+        Ok(self.raise_exception(number)?)
     }
 
-    pub fn py_set_large_age(&mut self, ages: Vec<u32>) -> PyResult<u32> {
+    fn py_set_large_age(&mut self, ages: Vec<u32>) -> PyResult<u32> {
         info!("rust function py_set_large_age start...");
         let age = ages.iter().max();
         self.age = age.unwrap().to_owned();
         Ok(self.age)
     }
 
-    pub fn py_set_other_age(&self, stu: &mut Student) -> PyResult<()> {
+    fn py_set_other_age(&self, stu: &mut Student) {
         self.set_other_age(stu);
-        Ok(())
     }
 }
 
 // Student 编写与python无关的方法
 impl Student {
     // 不可变借用的方法
-    pub fn get_info(&self) -> String {
+    fn get_info(&self) -> String {
         format!("Name: {}, Age: {}", self.name, self.age)
     }
 
     // 可变借用的方法
-    pub fn set_age(&mut self, new_age: u32) {
-        self.age = new_age;
+    fn set_age(&mut self, age: u32) -> Result<()> {
+        if age <= 0 || age > 120 {
+            return Err(Error::ValidationError(age.to_string()));
+        }
+        self.age = age;
+        Ok(())
     }
 
-    pub fn set_other_age(&self, stu: &mut Student) {
-        stu.set_age(self.age)
+    fn set_other_age(&self, stu: &mut Student) {
+        let _ = stu.set_age(self.age).unwrap();
+    }
+
+    fn raise_exception(&self, number: Option<i32>) -> Result<String> {
+        info!("rust function raise_exception start...");
+        match number {
+            Some(n) if n < 0 => Err(Error::Ods),
+            Some(n) if n > 100 => Err(Error::Xls),
+            _ => Ok(format!("No exception raised, number: {:?}", number)),
+        }
     }
 }
