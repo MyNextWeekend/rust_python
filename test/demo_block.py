@@ -17,10 +17,10 @@ def test_class():
     # 有get_all注解的时候才可以获取属性的值
     log.info(f"name:{stu.name},age:{stu.age}")
     age_list = [1, 2, 3, 4, 50, 10]
-    stu.py_set_large_age(age_list)
+    stu.set_large_age(age_list)
 
     try:
-        stu.py_raise_exception(-2)
+        stu.raise_exception(-2)
     except ChildErrorA as e:
         log.info(f"catch ChildErrorA: {e}")
     except Exception as e:
@@ -44,7 +44,7 @@ def test_instance():
     stu.age = 100
     log.info(f"通过实例方法修改属性之后: {student_info(stu)}")
     stu2 = Student("张三", 19)
-    stu.py_set_other_age(stu2)
+    stu.set_other_age(stu2)
     log.info(f"通过实例方法修改属性之后: {student_info(stu2)}")
 
 

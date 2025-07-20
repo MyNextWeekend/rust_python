@@ -1,6 +1,6 @@
 use crate::error::{Error, Result};
 use log::info;
-use pyo3::*;
+use pyo3::{types::PyType, *};
 
 /// 类实例作为型参  操作对象的不可变借用
 #[pyfunction]
@@ -32,16 +32,25 @@ impl Student {
         format!("Student(name='{}', age={})", self.name, self.age)
     }
 
+    /// 类函数
+    #[classmethod]
+    #[pyo3(name = "from_xx")]
+    fn py_from_xx(_cls: &Bound<'_, PyType>, _py: Python<'_>) -> PyResult<Self> {
+        Ok(Self::from_xx()?)
+    }
+
     #[new]
     fn py_new(name: String, age: u32) -> Self {
         Student { name, age }
     }
 
     /// 抛出自定义异常
+    #[pyo3(name = "raise_exception")]
     fn py_raise_exception(&self, number: Option<i32>) -> PyResult<String> {
         Ok(self.raise_exception(number)?)
     }
 
+    #[pyo3(name = "set_large_age")]
     fn py_set_large_age(&mut self, ages: Vec<u32>) -> PyResult<u32> {
         info!("rust function py_set_large_age start...");
         let age = ages.iter().max();
@@ -49,6 +58,7 @@ impl Student {
         Ok(self.age)
     }
 
+    #[pyo3(name = "set_other_age")]
     fn py_set_other_age(&self, stu: &mut Student) {
         self.set_other_age(stu);
     }
@@ -56,6 +66,14 @@ impl Student {
 
 // Student 编写与python无关的方法
 impl Student {
+    fn from_xx() -> Result<Self> {
+        info!("rust function from_filelike start...");
+        Ok(Self {
+            name: "Default Student".to_string(),
+            age: 18,
+        })
+    }
+
     // 不可变借用的方法
     fn get_info(&self) -> String {
         format!("Name: {}, Age: {}", self.name, self.age)
