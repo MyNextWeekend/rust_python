@@ -13,7 +13,7 @@ pub(crate) type Result<T> = std::result::Result<T, Error>;
 #[derive(Debug, thiserror::Error)]
 pub(crate) enum Error {
     #[error("An IO error occurred")]
-    Io(std::io::Error),
+    Io(#[from] std::io::Error),
     #[error("An ODS error occurred")]
     Ods,
     #[error("An XLS error occurred")]
