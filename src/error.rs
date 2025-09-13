@@ -12,23 +12,24 @@ pub(crate) type Result<T> = std::result::Result<T, Error>;
 
 #[derive(Debug, thiserror::Error)]
 pub(crate) enum Error {
-    #[error("An IO error occurred")]
+    #[error("IO error: {0}")]
     Io(#[from] std::io::Error),
-    #[error("An ODS error occurred")]
-    Ods,
-    #[error("An XLS error occurred")]
-    Xls,
+    #[error("权限不足")]
+    Unauthorized,
+    #[error("非法状态: {0}")]
+    InvalidState(String),
     #[error("validation error: {0}")]
-    ValidationError(String),
+    InvalidParameter(String),
 }
 
+// 转换为 自定义的 python 异常
 impl From<Error> for pyo3::PyErr {
     fn from(err: Error) -> Self {
         match err {
-            Error::Io(e) => MyError::new_err(format!("IO error: {}", e)),
-            Error::Ods => ChildErrorA::new_err(err.to_string()),
-            Error::Xls => ChildErrorB::new_err(err.to_string()),
-            Error::ValidationError(_) => pyo3::exceptions::PyValueError::new_err(err.to_string()),
+            Error::Io(e) => MyError::new_err(e.to_string()),
+            Error::Unauthorized => ChildErrorA::new_err(err.to_string()),
+            Error::InvalidState(_) => ChildErrorB::new_err(err.to_string()),
+            Error::InvalidParameter(_) => pyo3::exceptions::PyValueError::new_err(err.to_string()),
         }
     }
 }
