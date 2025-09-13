@@ -115,7 +115,7 @@ jobs:
           # 上传dist目录下的所有文件
           files: |
             dist/**/*.whl
-          # 是否生成草稿发布
-          draft: false
-          # 是否设为预发布
-          prerelease: false
+          draft: false  # 不设为草稿（直接发布）
+          prerelease: true  # 设为预发布（非正式版本）
+          generate_release_notes: false  # 禁用自动生成发布说明 → 同时禁用默认源码包上传
+          fail_on_unmatched_files: true  # 可选：若未找到 wheel 文件则失败，避免空发布
