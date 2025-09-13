@@ -82,7 +82,7 @@ impl Student {
     // 可变借用的方法
     fn set_age(&mut self, age: u32) -> Result<()> {
         if age <= 0 || age > 120 {
-            return Err(Error::ValidationError(age.to_string()));
+            return Err(Error::InvalidParameter(format!("age 需要在0-20之间")));
         }
         self.age = age;
         Ok(())
@@ -95,8 +95,8 @@ impl Student {
     fn raise_exception(&self, number: Option<i32>) -> Result<String> {
         info!("rust function raise_exception start...");
         match number {
-            Some(n) if n < 0 => Err(Error::ValidationError("不能小于0".to_string())),
-            Some(n) if n > 100 => Err(Error::ValidationError("不能大于100".to_string())),
+            Some(n) if n < 0 => Err(Error::Unauthorized),
+            Some(n) if n > 100 => Err(Error::InvalidState(n.to_string())),
             _ => Ok(format!("No exception raised, number: {:?}", number)),
         }
     }
