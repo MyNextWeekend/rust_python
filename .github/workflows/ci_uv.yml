@@ -92,10 +92,14 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: dist
-          path: dist
+          pattern: dist-*
 
-      - name: 显示下载的文件
-        run: ls -R dist
+      - name: 验证文件存在性
+        run: |
+          echo "当前目录结构："
+          tree dist  # 显示完整目录结构
+          echo "找到的wheel文件："
+          find dist -name "*.whl"  # 查找所有wheel文件
 
       - name: 创建GitHub Release
         uses: softprops/action-gh-release@v2
@@ -109,3 +113,4 @@ jobs:
           draft: false
           # 是否设为预发布
           prerelease: false
+          disable_defaults: true  # 不生成源码压缩包
