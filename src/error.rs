@@ -18,7 +18,7 @@ pub(crate) enum Error {
     Ods,
     #[error("An XLS error occurred")]
     Xls,
-    #[error("A validation error occurred: {0}")]
+    #[error("validation error: {0}")]
     ValidationError(String),
 }
 

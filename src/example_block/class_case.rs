@@ -95,8 +95,8 @@ impl Student {
     fn raise_exception(&self, number: Option<i32>) -> Result<String> {
         info!("rust function raise_exception start...");
         match number {
-            Some(n) if n < 0 => Err(Error::Ods),
-            Some(n) if n > 100 => Err(Error::Xls),
+            Some(n) if n < 0 => Err(Error::ValidationError("不能小于0".to_string())),
+            Some(n) if n > 100 => Err(Error::ValidationError("不能大于100".to_string())),
             _ => Ok(format!("No exception raised, number: {:?}", number)),
         }
     }
