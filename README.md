@@ -61,4 +61,10 @@ maturin build --release --strip
 
 ```bash
 # 示例见文件夹 .github/workflows
+
+# 触发生成 releases 
+# 1、创建标签
+git tag v0.1.0
+# 2、推送标签
+git push origin v0.1.0
 ```
