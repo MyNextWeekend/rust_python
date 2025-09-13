@@ -1,8 +1,10 @@
 name: 自动构建 by uv
 on:
   push:
-    branches:
-      - main
+    # branches:
+    #   - main
+    tags:
+      - "v*"  # 匹配所有以 v 开头的 Tag（如 v0.1.0、v1.2.3-beta）
   pull_request:
     branches:
       - main
@@ -92,7 +94,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: dist
-          pattern: dist-*
+          path: dist  # 下载到dist目录
 
       - name: 验证文件存在性
         run: |

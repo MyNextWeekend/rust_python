@@ -67,4 +67,9 @@ maturin build --release --strip
 git tag v0.1.0
 # 2、推送标签
 git push origin v0.1.0
+
+# 删除本地 tag
+git tag -d v0.1.0
+# 删除远程 tag
+git push origin --delete v0.1.0
 ```
