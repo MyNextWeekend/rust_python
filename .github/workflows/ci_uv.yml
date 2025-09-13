@@ -89,6 +89,9 @@ jobs:
     needs: [build, merge-build-artifacts]
     # 只在推送标签时运行
     if: success() && startsWith(github.ref, 'refs/tags/')
+    permissions:
+      # 添加创建发布的权限
+      contents: write
     steps:
       - name: 下载所有构建产物
         uses: actions/download-artifact@v4
@@ -115,4 +118,3 @@ jobs:
           draft: false
           # 是否设为预发布
           prerelease: false
-          disable_defaults: true  # 不生成源码压缩包
