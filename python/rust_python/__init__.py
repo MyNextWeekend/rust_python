@@ -12,7 +12,7 @@ from rust_python._core import (
     student_set_age,
 )
 
-__all__ = [
+__all__: list[str] = [
     "ChildErrorA",
     "ChildErrorB",
     "ChildErrorC",
