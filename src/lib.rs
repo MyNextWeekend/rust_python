@@ -1,27 +1,31 @@
-use pyo3::prelude::*;
-
 mod error;
 mod example_block;
 mod example_thread;
 
-pub use crate::error::{ChildErrorA, ChildErrorB, ChildErrorC, MyError};
-pub use crate::example_block::*;
-pub use crate::example_thread::*;
-
-/// 这个是模块描述：在Rust中实现的Python模块。
-#[pymodule]
+/// 在 Rust 中实现的 Python 核心模块。
+///
+/// 该模块通过 PyO3 绑定提供高性能的数据处理函数
+#[pyo3::pymodule]
 mod _core {
 
     use pyo3::{types::PyModule, Bound, PyResult};
 
     #[pymodule_export]
-    use crate::{
-        dic_to_list, list_to_dic, many_args, parallel_sum_of_squares, student_info,
-        student_set_age, ChildErrorA, ChildErrorB, ChildErrorC, MyError, Student,
+    use crate::example_block::{
+        dic_to_list, list_to_dic, many_args, student_info, student_set_age, Student,
     };
 
+    #[pymodule_export]
+    use crate::example_thread::parallel_sum_of_squares;
+
+    #[pymodule_export]
+    use crate::error::{ChildErrorA, ChildErrorB, ChildErrorC, MyError};
+
+    /// 在模块初始化时 运行
+    /// 在 Python 执行 `import` 时触发，用于初始化日志系统。
     #[pymodule_init]
     fn init(_m: &Bound<'_, PyModule>) -> PyResult<()> {
+        // 初始化 pyo3-log，允许在 Rust 中使用 log 宏并将输出重定向到 Python
         pyo3_log::init();
         Ok(())
     }

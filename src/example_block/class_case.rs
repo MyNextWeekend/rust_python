@@ -1,18 +1,19 @@
 use crate::error::{Error, Result};
-use log::info;
 use pyo3::{types::PyType, *};
 
 /// 类实例作为型参  操作对象的不可变借用
 #[pyfunction]
 pub fn student_info(stu: &Student) -> String {
-    info!("rust function student_info start...");
+    log::info!("rust function student_info start...");
+
     stu.get_info()
 }
 
 /// 类实例作为型参  操作对象的可变借用
 #[pyfunction]
 pub fn student_set_age(stu: &mut Student, age: u32) -> PyResult<()> {
-    info!("rust function student_set_age start...");
+    log::info!("rust function student_set_age start...");
+
     stu.set_age(age)?;
     Ok(())
 }
@@ -52,10 +53,14 @@ impl Student {
 
     #[pyo3(name = "set_large_age")]
     fn py_set_large_age(&mut self, ages: Vec<u32>) -> PyResult<u32> {
-        info!("rust function py_set_large_age start...");
+        log::info!("rust function py_set_large_age start...");
+
         let age = ages.iter().max();
-        self.age = age.unwrap().to_owned();
-        Ok(self.age)
+        if let Some(age) = age {
+            return Ok(age.to_owned());
+        } else {
+            return Err(Error::InvalidParameter("输入的列表为空".to_string()).into());
+        }
     }
 
     #[pyo3(name = "set_other_age")]
@@ -67,7 +72,8 @@ impl Student {
 // Student 编写与python无关的方法
 impl Student {
     fn from_xx() -> Result<Self> {
-        info!("rust function from_filelike start...");
+        log::info!("rust function from_filelike start...");
+
         Ok(Self {
             name: "Default Student".to_string(),
             age: 18,
@@ -93,7 +99,8 @@ impl Student {
     }
 
     fn raise_exception(&self, number: Option<i32>) -> Result<String> {
-        info!("rust function raise_exception start...");
+        log::info!("rust function raise_exception start...");
+        
         match number {
             Some(n) if n < 0 => Err(Error::Unauthorized),
             Some(n) if n > 100 => Err(Error::InvalidState(n.to_string())),
