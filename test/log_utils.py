@@ -68,5 +68,5 @@ class Logger:
         console_handle.setFormatter(fmt)
         return console_handle
 
-    def get_logger(self):
+    def get_logger(self) -> logging.Logger:
         return self.logger
