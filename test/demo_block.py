@@ -1,4 +1,3 @@
-from log_utils import Logger
 from rust_python import (
     ChildErrorA,
     Student,
@@ -7,6 +6,8 @@ from rust_python import (
     many_args,
     student_info,
 )
+
+from .log_utils import Logger
 
 log = Logger().get_logger()
 

@@ -100,7 +100,7 @@ impl Student {
 
     fn raise_exception(&self, number: Option<i32>) -> Result<String> {
         log::info!("rust function raise_exception start...");
-        
+
         match number {
             Some(n) if n < 0 => Err(Error::Unauthorized),
             Some(n) if n > 100 => Err(Error::InvalidState(n.to_string())),
