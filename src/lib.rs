@@ -12,14 +12,19 @@ mod _core {
 
     #[pymodule_export]
     use crate::example_block::{
-        dic_to_list, list_to_dic, many_args, student_info, student_set_age, Student,
+        chunk_array, dic_to_list, factorial, fibonacci, flatten_array,
+        generate_large_array, hash_string, list_to_dic, many_args, reverse_string,
+        student_info, student_set_age, Student, Teacher, unique_sorted,
     };
 
     #[pymodule_export]
-    use crate::example_thread::parallel_sum_of_squares;
+    use crate::example_thread::{
+        parallel_average, parallel_filter_even, parallel_max, parallel_sum_array,
+        parallel_sum_of_squares, parallel_square_array, parallel_with_thread_pool,
+    };
 
     #[pymodule_export]
-    use crate::error::{ChildErrorA, ChildErrorB, ChildErrorC, MyError};
+    use crate::error::{ChildErrorA, ChildErrorB, ChildErrorC, DatabaseError, MyError, NetworkError, ValidationError};
 
     /// 在模块初始化时 运行
     /// 在 Python 执行 `import` 时触发，用于初始化日志系统。

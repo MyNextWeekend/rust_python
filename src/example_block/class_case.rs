@@ -18,93 +18,181 @@ pub fn student_set_age(stu: &mut Student, age: u32) -> PyResult<()> {
     Ok(())
 }
 
-/// 这个是类的描述
+/// 学生类
 #[pyclass(get_all, set_all)]
+#[derive(Clone)]
 pub struct Student {
     name: String,
     age: u32,
+    grade: Option<String>,
+    gpa: Option<f32>,
 }
 
-/// Student 暴露给python调用的方法
+/// Student 暴露给 Python 调用的方法
 #[pymethods]
 impl Student {
-    /// 打印对象的时候调用
     fn __repr__(&self) -> String {
-        format!("Student(name='{}', age={})", self.name, self.age)
+        format!(
+            "Student(name='{}', age={}, grade={:?}, gpa={:?})",
+            self.name, self.age, self.grade, self.gpa
+        )
     }
 
-    /// 类函数
     #[classmethod]
-    #[pyo3(name = "from_xx")]
-    fn py_from_xx(_cls: &Bound<'_, PyType>, _py: Python<'_>) -> PyResult<Self> {
-        Ok(Self::from_xx()?)
+    fn from_default(_cls: &Bound<'_, PyType>) -> Self {
+        Self::default_impl()
+    }
+
+    #[classmethod]
+    fn from_dict(_cls: &Bound<'_, PyType>, data: std::collections::HashMap<String, String>) -> PyResult<Self> {
+        let name = data.get("name").cloned().ok_or_else(|| {
+            pyo3::exceptions::PyValueError::new_err("Missing 'name' key")
+        })?;
+        let age: u32 = data.get("age")
+            .ok_or_else(|| pyo3::exceptions::PyValueError::new_err("Missing 'age' key"))?
+            .parse()
+            .map_err(|_| pyo3::exceptions::PyValueError::new_err("Invalid 'age' value"))?;
+        
+        let grade = data.get("grade").cloned();
+        let gpa: Option<f32> = data.get("gpa")
+            .map(|s| s.parse().map_err(|_| pyo3::exceptions::PyValueError::new_err("Invalid 'gpa' value")))
+            .transpose()?;
+        
+        Ok(Self { name, age, grade, gpa })
     }
 
     #[new]
-    fn py_new(name: String, age: u32) -> Self {
-        Student { name, age }
+    #[pyo3(signature = (name, age, grade = None, gpa = None))]
+    fn new(name: String, age: u32, grade: Option<String>, gpa: Option<f32>) -> Self {
+        Student { name, age, grade, gpa }
     }
 
-    /// 抛出自定义异常
-    #[pyo3(name = "raise_exception")]
-    fn py_raise_exception(&self, number: Option<i32>) -> PyResult<String> {
-        Ok(self.raise_exception(number)?)
+    fn raise_exception(&self, number: Option<i32>) -> PyResult<String> {
+        Ok(self.raise_exception_impl(number)?)
     }
 
-    #[pyo3(name = "set_large_age")]
-    fn py_set_large_age(&mut self, ages: Vec<u32>) -> PyResult<u32> {
-        log::info!("rust function py_set_large_age start...");
+    fn set_large_age(&mut self, ages: Vec<u32>) -> PyResult<u32> {
+        log::info!("rust function set_large_age start...");
 
         let age = ages.iter().max();
-        if let Some(age) = age {
-            return Ok(age.to_owned());
+        if let Some(&age) = age {
+            self.age = age;
+            Ok(age)
         } else {
-            return Err(Error::InvalidParameter("输入的列表为空".to_string()).into());
+            Err(Error::InvalidParameter("输入的列表为空".to_string()).into())
         }
     }
 
-    #[pyo3(name = "set_other_age")]
-    fn py_set_other_age(&self, stu: &mut Student) {
-        self.set_other_age(stu);
+    fn set_other_age(&mut self, stu: &Student) -> PyResult<()> {
+        Ok(self.set_age(stu.age)?)
+    }
+
+    fn calculate_birth_year(&self) -> u32 {
+        2024 - self.age
+    }
+
+    #[pyo3(signature = (name = None, age = None))]
+    fn update_info(&mut self, name: Option<String>, age: Option<u32>) -> PyResult<()> {
+        if let Some(name) = name {
+            self.name = name;
+        }
+        if let Some(age) = age {
+            self.set_age(age)?;
+        }
+        Ok(())
+    }
+
+    fn get_full_description(&self) -> String {
+        let mut desc = format!("{}，{}岁", self.name, self.age);
+        if let Some(grade) = &self.grade {
+            desc.push_str(&format!("，年级：{}", grade));
+        }
+        if let Some(gpa) = self.gpa {
+            desc.push_str(&format!("，GPA：{:.2}", gpa));
+        }
+        desc
     }
 }
 
-// Student 编写与python无关的方法
 impl Student {
-    fn from_xx() -> Result<Self> {
-        log::info!("rust function from_filelike start...");
+    fn default_impl() -> Self {
+        log::info!("rust function default_impl start...");
 
-        Ok(Self {
+        Self {
             name: "Default Student".to_string(),
             age: 18,
-        })
+            grade: None,
+            gpa: None,
+        }
     }
 
-    // 不可变借用的方法
     fn get_info(&self) -> String {
         format!("Name: {}, Age: {}", self.name, self.age)
     }
 
-    // 可变借用的方法
     fn set_age(&mut self, age: u32) -> Result<()> {
-        if age <= 0 || age > 120 {
-            return Err(Error::InvalidParameter(format!("age 需要在0-20之间")));
+        if age == 0 || age > 120 {
+            return Err(Error::InvalidParameter(format!("age 需要在1-120之间，当前值: {}", age)));
         }
         self.age = age;
         Ok(())
     }
 
-    fn set_other_age(&self, stu: &mut Student) {
-        let _ = stu.set_age(self.age).unwrap();
-    }
-
-    fn raise_exception(&self, number: Option<i32>) -> Result<String> {
-        log::info!("rust function raise_exception start...");
+    fn raise_exception_impl(&self, number: Option<i32>) -> Result<String> {
+        log::info!("rust function raise_exception_impl start...");
 
         match number {
             Some(n) if n < 0 => Err(Error::Unauthorized),
             Some(n) if n > 100 => Err(Error::InvalidState(n.to_string())),
             _ => Ok(format!("No exception raised, number: {:?}", number)),
+        }
+    }
+}
+
+/// 教师类
+#[pyclass(get_all, set_all)]
+pub struct Teacher {
+    name: String,
+    subject: String,
+    students: Vec<Student>,
+}
+
+#[pymethods]
+impl Teacher {
+    #[new]
+    fn new(name: String, subject: String) -> Self {
+        Teacher {
+            name,
+            subject,
+            students: Vec::new(),
+        }
+    }
+
+    fn __repr__(&self) -> String {
+        format!(
+            "Teacher(name='{}', subject='{}', students={})",
+            self.name, self.subject, self.students.len()
+        )
+    }
+
+    fn add_student(&mut self, student: Student) {
+        self.students.push(student);
+    }
+
+    fn get_student_count(&self) -> usize {
+        self.students.len()
+    }
+
+    fn get_all_students_info(&self) -> Vec<String> {
+        self.students.iter().map(|s| s.get_info()).collect()
+    }
+
+    fn get_average_age(&self) -> f64 {
+        if self.students.is_empty() {
+            0.0
+        } else {
+            let sum: u32 = self.students.iter().map(|s| s.age).sum();
+            sum as f64 / self.students.len() as f64
         }
     }
 }

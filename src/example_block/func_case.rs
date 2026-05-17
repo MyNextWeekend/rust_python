@@ -3,6 +3,7 @@ use pyo3::{
     *,
 };
 use std::collections::HashMap;
+use std::hash::{Hash, Hasher};
 
 /// 默认参数以及不定长参数
 #[pyfunction]
@@ -28,7 +29,6 @@ pub fn dic_to_list(input_dic: HashMap<String, String>) -> PyResult<Vec<String>> 
 
     let mut result = Vec::new();
     for (_, v) in input_dic {
-        // println!("遍历字典: {k}: {v}");
         result.push(v)
     }
     Ok(result)
@@ -41,8 +41,110 @@ pub fn list_to_dic(names: Vec<String>) -> PyResult<HashMap<usize, String>> {
 
     let mut result = HashMap::new();
     for (index, value) in names.iter().enumerate() {
-        // println!("遍历列表: {:?}", value);
         result.insert(index, value.to_owned());
     }
+    Ok(result)
+}
+
+/// 字符串处理：反转字符串
+#[pyfunction]
+pub fn reverse_string(s: &str) -> PyResult<String> {
+    log::info!("rust function reverse_string start...");
+    
+    Ok(s.chars().rev().collect())
+}
+
+/// 字符串处理：计算字符串哈希
+#[pyfunction]
+pub fn hash_string(s: &str) -> PyResult<u64> {
+    log::info!("rust function hash_string start...");
+    
+    let mut hasher = std::collections::hash_map::DefaultHasher::new();
+    s.hash(&mut hasher);
+    Ok(hasher.finish())
+}
+
+/// 数值计算：计算阶乘
+#[pyfunction]
+pub fn factorial(n: u64) -> PyResult<u64> {
+    log::info!("rust function factorial start...");
+    
+    if n > 20 {
+        return Err(pyo3::exceptions::PyOverflowError::new_err(
+            "Factorial exceeds u64 range for n > 20",
+        ));
+    }
+    
+    let mut result = 1u64;
+    for i in 2..=n {
+        result *= i;
+    }
+    Ok(result)
+}
+
+/// 数值计算：斐波那契数列（迭代方式）
+#[pyfunction]
+pub fn fibonacci(n: u32) -> PyResult<u64> {
+    log::info!("rust function fibonacci start...");
+    
+    if n == 0 {
+        return Ok(0);
+    } else if n == 1 {
+        return Ok(1);
+    }
+    
+    let mut a = 0u64;
+    let mut b = 1u64;
+    for _ in 2..=n {
+        let c = a + b;
+        a = b;
+        b = c;
+    }
+    Ok(b)
+}
+
+/// 数组处理：数组去重并排序
+#[pyfunction]
+pub fn unique_sorted(arr: Vec<i64>) -> PyResult<Vec<i64>> {
+    log::info!("rust function unique_sorted start...");
+    
+    let mut arr = arr;
+    arr.sort_unstable();
+    arr.dedup();
+    Ok(arr)
+}
+
+/// 数组处理：数组分块
+#[pyfunction]
+pub fn chunk_array(arr: Vec<i64>, chunk_size: usize) -> PyResult<Vec<Vec<i64>>> {
+    log::info!("rust function chunk_array start...");
+    
+    if chunk_size == 0 {
+        return Err(pyo3::exceptions::PyValueError::new_err(
+            "Chunk size must be greater than 0",
+        ));
+    }
+    
+    let chunks: Vec<Vec<i64>> = arr.chunks(chunk_size)
+        .map(|chunk| chunk.to_vec())
+        .collect();
+    Ok(chunks)
+}
+
+/// 数组处理：扁平化嵌套数组（简单版本）
+#[pyfunction]
+pub fn flatten_array(arrays: Vec<Vec<i64>>) -> PyResult<Vec<i64>> {
+    log::info!("rust function flatten_array start...");
+    
+    let flattened: Vec<i64> = arrays.into_iter().flatten().collect();
+    Ok(flattened)
+}
+
+/// 性能测试：生成大量数据
+#[pyfunction]
+pub fn generate_large_array(size: usize) -> PyResult<Vec<i64>> {
+    log::info!("rust function generate_large_array start...");
+    
+    let result: Vec<i64> = (0..size as i64).collect();
     Ok(result)
 }
