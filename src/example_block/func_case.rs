@@ -14,7 +14,7 @@ pub fn many_args(
     py_kwargs: Option<&Bound<'_, PyDict>>,
 ) -> PyResult<String> {
     log::info!("rust function many_args start...");
-    
+
     let result = format!(
         "func many_args => num: {}  py_args: {:?} py_kwargs: {:?} ",
         num, py_args, py_kwargs,
@@ -50,7 +50,7 @@ pub fn list_to_dic(names: Vec<String>) -> PyResult<HashMap<usize, String>> {
 #[pyfunction]
 pub fn reverse_string(s: &str) -> PyResult<String> {
     log::info!("rust function reverse_string start...");
-    
+
     Ok(s.chars().rev().collect())
 }
 
@@ -58,7 +58,7 @@ pub fn reverse_string(s: &str) -> PyResult<String> {
 #[pyfunction]
 pub fn hash_string(s: &str) -> PyResult<u64> {
     log::info!("rust function hash_string start...");
-    
+
     let mut hasher = std::collections::hash_map::DefaultHasher::new();
     s.hash(&mut hasher);
     Ok(hasher.finish())
@@ -68,13 +68,13 @@ pub fn hash_string(s: &str) -> PyResult<u64> {
 #[pyfunction]
 pub fn factorial(n: u64) -> PyResult<u64> {
     log::info!("rust function factorial start...");
-    
+
     if n > 20 {
         return Err(pyo3::exceptions::PyOverflowError::new_err(
             "Factorial exceeds u64 range for n > 20",
         ));
     }
-    
+
     let mut result = 1u64;
     for i in 2..=n {
         result *= i;
@@ -86,13 +86,13 @@ pub fn factorial(n: u64) -> PyResult<u64> {
 #[pyfunction]
 pub fn fibonacci(n: u32) -> PyResult<u64> {
     log::info!("rust function fibonacci start...");
-    
+
     if n == 0 {
         return Ok(0);
     } else if n == 1 {
         return Ok(1);
     }
-    
+
     let mut a = 0u64;
     let mut b = 1u64;
     for _ in 2..=n {
@@ -107,7 +107,7 @@ pub fn fibonacci(n: u32) -> PyResult<u64> {
 #[pyfunction]
 pub fn unique_sorted(arr: Vec<i64>) -> PyResult<Vec<i64>> {
     log::info!("rust function unique_sorted start...");
-    
+
     let mut arr = arr;
     arr.sort_unstable();
     arr.dedup();
@@ -118,13 +118,13 @@ pub fn unique_sorted(arr: Vec<i64>) -> PyResult<Vec<i64>> {
 #[pyfunction]
 pub fn chunk_array(arr: Vec<i64>, chunk_size: usize) -> PyResult<Vec<Vec<i64>>> {
     log::info!("rust function chunk_array start...");
-    
+
     if chunk_size == 0 {
         return Err(pyo3::exceptions::PyValueError::new_err(
             "Chunk size must be greater than 0",
         ));
     }
-    
+
     let chunks: Vec<Vec<i64>> = arr.chunks(chunk_size)
         .map(|chunk| chunk.to_vec())
         .collect();
@@ -135,7 +135,7 @@ pub fn chunk_array(arr: Vec<i64>, chunk_size: usize) -> PyResult<Vec<Vec<i64>>> 
 #[pyfunction]
 pub fn flatten_array(arrays: Vec<Vec<i64>>) -> PyResult<Vec<i64>> {
     log::info!("rust function flatten_array start...");
-    
+
     let flattened: Vec<i64> = arrays.into_iter().flatten().collect();
     Ok(flattened)
 }
@@ -144,7 +144,7 @@ pub fn flatten_array(arrays: Vec<Vec<i64>>) -> PyResult<Vec<i64>> {
 #[pyfunction]
 pub fn generate_large_array(size: usize) -> PyResult<Vec<i64>> {
     log::info!("rust function generate_large_array start...");
-    
+
     let result: Vec<i64> = (0..size as i64).collect();
     Ok(result)
 }

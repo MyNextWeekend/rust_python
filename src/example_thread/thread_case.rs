@@ -61,7 +61,7 @@ pub fn parallel_average(py: Python<'_>, arr: Vec<f64>) -> PyResult<f64> {
         let (sum, count) = arr.into_par_iter()
             .map(|x| (x, 1usize))
             .reduce(|| (0.0, 0), |(a_sum, a_cnt), (b_sum, b_cnt)| (a_sum + b_sum, a_cnt + b_cnt));
-        
+
         if count == 0 {
             Ok(0.0)
         } else {
@@ -79,14 +79,14 @@ pub fn parallel_with_thread_pool(py: Python<'_>, num: usize, threads: usize) -> 
             .num_threads(threads)
             .build()
             .map_err(|e| pyo3::exceptions::PyRuntimeError::new_err(format!("Failed to create thread pool: {}", e)))?;
-        
+
         let sum: u128 = pool.install(|| {
             (0..=num).into_par_iter().map(|i| {
                 let i1 = i as u128;
                 i1 * i1
             }).sum()
         });
-        
+
         Ok(sum)
     })
 }

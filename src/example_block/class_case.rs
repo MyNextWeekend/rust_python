@@ -52,12 +52,12 @@ impl Student {
             .ok_or_else(|| pyo3::exceptions::PyValueError::new_err("Missing 'age' key"))?
             .parse()
             .map_err(|_| pyo3::exceptions::PyValueError::new_err("Invalid 'age' value"))?;
-        
+
         let grade = data.get("grade").cloned();
         let gpa: Option<f32> = data.get("gpa")
             .map(|s| s.parse().map_err(|_| pyo3::exceptions::PyValueError::new_err("Invalid 'gpa' value")))
             .transpose()?;
-        
+
         Ok(Self { name, age, grade, gpa })
     }
 

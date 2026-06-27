@@ -1,6 +1,6 @@
 import time
 
-from log_utils import Logger
+from test.log_utils import Logger
 from rust_python import (
     ChildErrorA,
     Student,
@@ -53,12 +53,7 @@ def test_class():
 
 def test_class_from_dict():
     """从字典创建学生实例"""
-    data = {
-        "name": "王五",
-        "age": "20",
-        "grade": "大学",
-        "gpa": "3.9"
-    }
+    data = {"name": "王五", "age": "20", "grade": "大学", "gpa": "3.9"}
     stu = Student.from_dict(data)
     log.info(f"从字典创建: {stu}")
 
@@ -145,7 +140,7 @@ def test_instance():
 def test_error_handling():
     """错误处理测试"""
     stu = Student("测试", 10)
-    
+
     try:
         stu.update_info(age=200)
     except ValidationError as e:
@@ -157,52 +152,52 @@ if __name__ == "__main__":
     log.info("测试类功能")
     log.info("=" * 60)
     test_class()
-    
+
     log.info("=" * 60)
     log.info("测试从字典创建")
     log.info("=" * 60)
     test_class_from_dict()
-    
+
     log.info("=" * 60)
     log.info("测试从默认创建")
     log.info("=" * 60)
     test_class_from_default()
-    
+
     log.info("=" * 60)
     log.info("测试教师类")
     log.info("=" * 60)
     test_teacher_class()
-    
+
     log.info("=" * 60)
     log.info("测试函数")
     log.info("=" * 60)
     test_function()
-    
+
     log.info("=" * 60)
     log.info("测试字符串函数")
     log.info("=" * 60)
     test_string_functions()
-    
+
     log.info("=" * 60)
     log.info("测试数学函数")
     log.info("=" * 60)
     test_math_functions()
-    
+
     log.info("=" * 60)
     log.info("测试数组函数")
     log.info("=" * 60)
     test_array_functions()
-    
+
     log.info("=" * 60)
     log.info("测试性能")
     log.info("=" * 60)
     test_performance()
-    
+
     log.info("=" * 60)
     log.info("测试实例")
     log.info("=" * 60)
     test_instance()
-    
+
     log.info("=" * 60)
     log.info("测试错误处理")
     log.info("=" * 60)
