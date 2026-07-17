@@ -1,6 +1,6 @@
 import time
 
-from test.log_utils import Logger
+from tests.log_utils import Logger
 from rust_python import (
     ChildErrorA,
     Student,
