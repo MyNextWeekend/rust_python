@@ -19,7 +19,7 @@ pub fn student_set_age(stu: &mut Student, age: u32) -> PyResult<()> {
 }
 
 /// 学生类
-#[pyclass(get_all, set_all)]
+#[pyclass(get_all, set_all, from_py_object)]
 #[derive(Clone)]
 pub struct Student {
     name: String,
